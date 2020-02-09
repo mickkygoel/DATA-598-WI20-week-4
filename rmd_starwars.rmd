@@ -1,0 +1,107 @@
+---
+title: "Star Wars: The Sage continues"
+subtitle: "RMarkdown Advanced Features"
+author: "Mayank Goel"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_html: default
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+bibliography: bibliography.bib
+link-citations: yes
+---
+
+
+## 1. Setup chunk with 3+ settings
+
+
+```{r setup, include = TRUE, warning = FALSE, message = FALSE, echo = TRUE}
+library(tufte)
+knitr::opts_chunk$set(
+                        tidy = FALSE,
+                        collapse = TRUE,
+                        warning =  FALSE,
+                        message = FALSE,
+                        echo = TRUE,
+                        include = TRUE,
+                        cache.extra = packageVersion('tufte')
+                      )
+options(htmltools.dir.version = FALSE)
+```
+
+
+## 2. Using code from an external R script file and knitr::read_chunk()
+
+```{r}
+knitr::read_chunk("getdatetime.R")
+```
+
+
+```{r get-date-time, echo=TRUE, include=TRUE}
+# Using variable from external code
+
+```
+
+## 3. Printing a plot using starwars dataset & tidyverse
+
+```{r, starwars-plot, fig.cap = "a ggplot of Starwars data"}
+library(tidyverse)
+
+starwars %>%
+  filter(species == "Human") %>%
+  ggplot() +
+  aes(x = height,
+      y = mass) +
+  geom_point()
+```
+
+## 4. Printing a table using starwars dataset & tidyverse
+
+``` {r starwars-tbl}
+
+starwars %>%
+  filter(species == "Human") %>%
+  select(name,
+  height,
+  mass,
+  homeworld) %>%
+  knitr::kable(caption = "A knitr kable table of starwars data")
+```
+
+## 5. Two in-text citations using bibtex
+
+These are my in-text citations regarding Star Wars.
+
+- For more information on Star Wars can be found in the book [see @lucas1977star].
+
+- Means gives a new perspective on StarWars in this article [see @means1985star].
+
+
+## 6. Uses knitr caching on one chunk
+
+```{r, myfig, fig.cap = "a pic of Starwars logo", cache=TRUE}
+
+knitr::opts_chunk$set(cache.extra = R.version.string,
+                      cache.extra = R.version,
+                      cache.comments =  FALSE)
+
+# cached results are only applicable to a specific version of R
+
+knitr::include_graphics("https://lumiere-a.akamaihd.net/v1/images/og-generic_02031d2b.png?region=0%2C0%2C1200%2C1200")
+
+```
+
+
+
+> "Do. Or do not. There is no try"
+>
+> `r tufte::quote_footer('--- Yoda')`
+
+
+
+
+
